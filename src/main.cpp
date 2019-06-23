@@ -5,8 +5,8 @@
 #define USE_LIB_WEBSOCKET true
 
 #include "sensesp_app.h"
-#include "devices/onewire_temperature.h"
-#include "transforms/passthrough.h"
+#include "sensors/onewire_temperature.h"
+#include "signalk/signalk_output.h"
 #include "wiring_helpers.h"
 
 ReactESP app([] () {
@@ -25,13 +25,13 @@ ReactESP app([] () {
   DallasTemperatureSensors* dts = new DallasTemperatureSensors(D5);
 
   (new OneWireTemperature(dts, "/devices/temperature"))
-    -> connectTo(new Passthrough<float>("propulsion.0.temperature"));
+    -> connectTo(new SKOutput<float>("propulsion.main.temperature", "/sensors/temperature"));
 
   (new OneWireTemperature(dts, "/devices/coolantTemperature"))
-    -> connectTo(new Passthrough<float>("propulsion.0.coolantTemperature"));
+    -> connectTo(new SKOutput<float>("propulsion.main.coolantTemperature", "/sensors/coolantTemperature"));
 
   (new OneWireTemperature(dts, "/devices/exhaustTemperature"))
-    ->connectTo(new Passthrough<float>("propulsion.0.exhaustTemperature"));
+    ->connectTo(new SKOutput<float>("propulsion.main.exhaustTemperature", "/sensors/exhaustTemperature"));
 
   sensesp_app->enable();
 });
