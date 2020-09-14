@@ -20,17 +20,17 @@ ReactESP app([] () {
   Debug.setSerialEnabled(true);
   #endif
 
-  sensesp_app = new SensESPApp();
+  sensesp_app = new SensESPApp("engine-temp");
 
   DallasTemperatureSensors* dts = new DallasTemperatureSensors(D5);
 
-  (new OneWireTemperature(dts, "/devices/temperature"))
+  (new OneWireTemperature(dts, 1000, "/devices/temperature"))
     -> connectTo(new SKOutput<float>("propulsion.main.temperature", "/sensors/temperature"));
 
-  (new OneWireTemperature(dts, "/devices/coolantTemperature"))
+  (new OneWireTemperature(dts, 1000, "/devices/coolantTemperature"))
     -> connectTo(new SKOutput<float>("propulsion.main.coolantTemperature", "/sensors/coolantTemperature"));
 
-  (new OneWireTemperature(dts, "/devices/exhaustTemperature"))
+  (new OneWireTemperature(dts, 1000, "/devices/exhaustTemperature"))
     ->connectTo(new SKOutput<float>("propulsion.main.exhaustTemperature", "/sensors/exhaustTemperature"));
 
   sensesp_app->enable();
